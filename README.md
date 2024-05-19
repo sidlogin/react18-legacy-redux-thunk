@@ -10,6 +10,15 @@ Refer the following repostory README to setup React application using webpack ht
 3. Create actions for store
 4. Create reducer for store
 
+## Configure Redux persist
+1. Import below packages in store.js
+2. 
+
+```
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+```
 
 ### store.js configuration
 ```
