@@ -1,21 +1,12 @@
 import React from 'react';
 import './App.scss';
+import TodoList from './components/todos/TodoList';
 
 const App = () => {
     return (
         <div className="App">
-            Hello React!!!
+            <TodoList />
         </div>
     )
 }
-
-// const App = () => React.createElement(
-//     "div",
-//     {className: "App"},
-//     React.createElement(
-//         "h1",
-//         null,
-//         "Hello React!!"
-//     )
-// );
 export default App;
