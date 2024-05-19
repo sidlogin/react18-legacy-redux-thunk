@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Standalone Page</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital@0;1&display=swap" rel="stylesheet">
+
+    <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    #root {
+        font-family: "Roboto Condensed", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 1rem;
+
+        display: flex;
+        flex-direction: column;
+        gap: 2rem
+    }
+
+    Header {
+        margin: 0;
+        padding: 1.5rem;
+        background: #d7d7d7;
+    }
+    
+    section {
+        padding: 0 1rem;
+        height: calc(100vh - 15vh);
+    }
+
+    section > ul {
+        margin: 1rem;
+    }
+
+    Footer {
+        margin: 0;
+        padding: 1.5rem;
+        background: #d7d7d7;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const root = document.getElementById('root');
+
+        const memebersName = ["Alpha", "Beta", "Gamma"];
+        const membersNameObject = memebersName.map((item, i) => ({
+            id: i, name: item
+        }))
+
+        ReactDOM.createRoot(root).render(
+            <App />
+        );
+    
+        function Header({name}) {
+            return (
+                <header>
+                    {name} Header Component
+                </header>
+            );
+        }
+
+        function Main({teamMembers}) {
+            console.log('teamMembers: ', teamMembers);
+            return (
+                <section className="main">
+                    <h1>Team members details </h1>
+                    <ul>
+                        {
+                            teamMembers.map((member) => (
+                                <li key={member.id}>{member.name}</li>
+                            ))
+                        }
+                    </ul>
+                </section>
+            );
+        }
+
+        function Footer(props) {
+            return (
+                <footer>
+                    {props.name} Footer Component
+                </footer>
+            );
+        }
+
+        function App() {
+            return (
+                <>
+                    <Header name="React App" />
+                    <Main teamMembers={membersNameObject} />
+                    <Footer name="React App" />
+                </>
+            );
+        }
+    </script>
+</body>
+</html>
