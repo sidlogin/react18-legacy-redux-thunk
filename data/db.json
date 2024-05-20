@@ -1,19 +1,14 @@
 {
-  "items": [
+  "todos": [
     {
-      "id": 4,
-      "checked": false,
-      "item": "Biscuit"
+      "isCompleted": false,
+      "text": "Pay mobile bill",
+      "id": "9593"
     },
     {
-      "id": 5,
-      "checked": false,
-      "item": "Tomatos"
-    },
-    {
-      "id": 6,
-      "checked": false,
-      "item": "Jam"
+      "isCompleted": false,
+      "text": "Pay Rent",
+      "id": "894e"
     }
   ]
 }

@@ -132,4 +132,9 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(NewTodoForm);
 ```
 
+## Redux Thunk integration steps:
+1. Install following npm packages for `npm i redux-thunk redux-devtools-extension @babel/runtime`
+2. Install `npm i --save-dev @babel/plugin-transform-runtime`
+3. Update .babelrc file to update plugin
+
 
