@@ -1,10 +1,8 @@
-import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import { thunk } from 'redux-thunk';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import { composeWithDevTools } from "@redux-devtools/extension";
-import { thunk } from 'redux-thunk';
-
 import { todos } from './reducers';
 
 const reducers = {
@@ -18,11 +16,9 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers(reducers);
+const middlewareEnhancer = applyMiddleware(thunk);
+const composeWithDevTools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composedEnhancers = composeWithDevTools(middlewareEnhancer)
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const configureStore = () => createStore(
-    persistedReducer,
-    composeWithDevTools(
-        applyMiddleware(thunk)
-    )
-);
+export const configureStore = () => createStore(persistedReducer, composedEnhancers);

@@ -4,30 +4,32 @@ Refer the following repostory README to setup React application using webpack ht
 ## Mocked API response using json server:
 1. Run `npx json-server db.json --port 3100` inside data folder
 
-## Steps to integrate Redux in React application:
+## Step-1 To integrate Redux with thunk middleware in React application:
 1. To add Redux in to your React application install npm packages `npm i redux react-redux --save-dev`
-2. Create store.js in src folder of you react application
-3. Create actions for store
-4. Create reducer for store
-
-## Configure Redux persist
-1. Import below packages in store.js
-2. 
-
-```
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-```
+2. Install following npm packages for `npm i redux-thunk @redux-devtools/extension @babel/runtime`
+3. Install `npm i --save-dev @babel/plugin-transform-runtime`
+4. Update .babelrc file to update plugin
+5. Create store.js in src folder of you react application
+6. Add following configuration in store.js `applyMiddleware`, `composeWithDevTools` and `thunk`
+7. Create actions.js for store
+8. Create reducers.js for store
 
 ### store.js configuration
 ```
-import { createStore, compbineReducers } from 'redux';
+import { createStore, combineReducers, compose } from 'redux';
+import { thunk } from 'redux-thunk';
+import { todos } from './reducers';
 
-const reducers = {};
-const rootReducer = compbineReducers(reducers);
+const reducers = {
+    todos
+};
 
-export const configureStore = () => createStore(rootReducer);
+const rootReducer = combineReducers(reducers);
+const middlewareEnhancer = applyMiddleware(thunk);
+const composeWithDevTools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composedEnhancers = composeWithDevTools(middlewareEnhancer)
+
+export const configureStore = () => createStore(persistedReducer, composedEnhancers);
 ```
 
 ### Add store in to index.js
@@ -131,27 +133,35 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewTodoForm);
 ```
-
-## Redux Thunk integration steps:
-1. Install following npm packages for `npm i redux-thunk @redux-devtools/extension @babel/runtime`
-2. Install `npm i --save-dev @babel/plugin-transform-runtime`
-3. Update .babelrc file to update plugin
-4. Add following configuration in store.js `applyMiddleware`, `composeWithDevTools` and `thunk`
-
+## Step-2 To Configure Redux persist
 ```
-import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux';
-import { composeWithDevTools } from "@redux-devtools/extension";
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { thunk } from 'redux-thunk';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+import { todos } from './reducers';
 
-export const configureStore = () => createStore(
-    persistedReducer,
-    composeWithDevTools(
-        applyMiddleware(thunk)
-    )
-);
+const reducers = {
+    todos
+};
+
+const persistConfig = {
+    key: 'root',
+    storage,
+    stateReconciler: autoMergeLevel2
+};
+
+const rootReducer = combineReducers(reducers);
+const middlewareEnhancer = applyMiddleware(thunk);
+const composeWithDevTools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composedEnhancers = composeWithDevTools(middlewareEnhancer)
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const configureStore = () => createStore(persistedReducer, composedEnhancers);
 ```
 
-## Redux Thunk implemention:
+## Step-3 Redux Thunk implemention:
 1. Import requried `actions` in `thunk.js`
 2. Create new thunk function, for example `addTodoRequest` and dispatch respective actions as needed.
 3. Dispatch thunk function from component.
@@ -181,7 +191,7 @@ const mapDispatchToProps = dispatch => ({
 });
 ```
 
-## Redux Selector implemention:
+## Step-4 Redux Selector implemention:
 1. Create `selectors.js` file under `redux` folder
 2. Add respective `selectors` function in `selectors.js` file
 3. Install the npm package 'reselect' to create new selectors using existing selector. npm i `reselect`.
