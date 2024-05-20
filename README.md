@@ -133,8 +133,53 @@ export default connect(mapStateToProps, mapDispatchToProps)(NewTodoForm);
 ```
 
 ## Redux Thunk integration steps:
-1. Install following npm packages for `npm i redux-thunk redux-devtools-extension @babel/runtime`
+1. Install following npm packages for `npm i redux-thunk @redux-devtools/extension @babel/runtime`
 2. Install `npm i --save-dev @babel/plugin-transform-runtime`
 3. Update .babelrc file to update plugin
+4. Add following configuration in store.js `applyMiddleware`, `composeWithDevTools` and `thunk`
+
+```
+import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux';
+import { composeWithDevTools } from "@redux-devtools/extension";
+import { thunk } from 'redux-thunk';
+
+export const configureStore = () => createStore(
+    persistedReducer,
+    composeWithDevTools(
+        applyMiddleware(thunk)
+    )
+);
+```
+
+## Redux Thunk implemention:
+1. Import requried `actions` in `thunk.js`
+2. Create new thunk function, for example `addTodoRequest` and dispatch respective actions as needed.
+3. Dispatch thunk function from component.
+
+```
+export const addTodoRequest = text => async dispatch => {
+    try {
+        const response = await fetch(API_URL, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            method: 'post',
+            body: JSON.stringify({ id: new Date().getUTCMilliseconds().toString(), text, isCompleted: false }),
+        });
+        const todo = await response.json();
+        dispatch(createTodo(todo));
+    } catch (e) {
+        dispatch(displayAlert(e));
+    }
+}
+```
+
+### Replace existing action with newly created thunk function in NewTodoForm component:
+```
+const mapDispatchToProps = dispatch => ({
+    onCreatePressed: text => dispatch(addTodoRequest(text))
+});
+```
+
 
 
