@@ -4,7 +4,7 @@ import './TodoListItem.css';
 const TodoListItem = ({todo, onRemovePressed, onCompletedPressed}) => {
     return (
         <div className="todo-item-container">
-            <h3>{todo.text}</h3>
+            <h5>{todo.text}</h5>
             <div className="buttons-container">
                 {
                     todo.isCompleted ? null

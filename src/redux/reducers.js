@@ -5,48 +5,60 @@ import {
     LOAD_TODO_FAILURE,
     LOAD_TODO_IN_PROGRESS,
     LOAD_TODO_SUCCESS
-} from "./action";
+} from "./actions";
 
-const initialState = [];
-
-export const isLoading = (state = false, action) => {
-    const { type } = action;
-
-    switch (type) {
-    case LOAD_TODO_IN_PROGRESS:
-        return true;
-    case LOAD_TODO_SUCCESS:
-    case LOAD_TODO_FAILURE:
-        return false;
-    default:
-        return state;
-    }
-}
+const initialState = {
+    isLoading: false,
+    data: []
+};
 
 export const todos = (state = initialState, action) => {
     const { type, payload } = action;
     switch(type) {
         case CREATE_TODO: {
             const { todo } = payload;
-            return state.concat(todo);
+            return {
+                ...state,
+                data: state.data.concat(todo)
+            }
         }
         case REMOVE_TODO: {
-            return state.filter(todo => todo.id !== payload.todo.id);
+            return {
+                ...state,
+                data: state.data.filter(todo => todo.id !== payload.todo.id)
+            }
         }
         case MARK_TODO_AS_COMPLETED: {
-            return state.map(todo => {
-                if (todo.id === payload.todo.id) {
-                    return payload.todo;
-                }
-                return todo;
-            });
+            return {
+                ...state,
+                data: state.data.map(todo => {
+                    if (todo.id === payload.todo.id) {
+                        return payload.todo;
+                    }
+                    return todo;
+                })
+            };
         }
         case LOAD_TODO_SUCCESS: {
             const { todos } = payload;
-            return todos;
+            return {
+                ...state,
+                isLoading: false,
+                data: todos
+            };
         }
-        case LOAD_TODO_IN_PROGRESS:
-        case LOAD_TODO_FAILURE:
+        case LOAD_TODO_IN_PROGRESS: {
+            return {
+                ...state,
+                isLoading: true
+            };
+        }
+        case LOAD_TODO_FAILURE: {
+            return {
+                ...state,
+                isLoading: false
+            };
+        }
         default:
             return state;
     }

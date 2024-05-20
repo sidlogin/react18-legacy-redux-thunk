@@ -181,5 +181,27 @@ const mapDispatchToProps = dispatch => ({
 });
 ```
 
+## Redux Selector implemention:
+1. Create `selectors.js` file under `redux` folder
+2. Add respective `selectors` function in `selectors.js` file
+3. Install the npm package 'reselect' to create new selectors using existing selector. npm i `reselect`.
+4. Add the created selector in to TodoList component 
+
+```
+import { createSelector } from 'reselect';
+
+export const getTodos = state => state.todos.data;
+export const getTodosLoading = state => state.todos.isLoading;
+
+export const getIncompleteTodos = createSelector(
+    getTodos,
+    (todos) => todos.filter(todo => !todo.isCompleted),
+);
+
+export const getCompletedTodos = createSelector(
+    getTodos,
+    (todos) => todos.filter(todo => todo.isCompleted),
+);
+```
 
 

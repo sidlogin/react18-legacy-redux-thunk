@@ -5,7 +5,7 @@ import {
     loadTodoFailure,
     loadTodoInProgress,
     markTodoAsCompleted
-} from "./action";
+} from "./actions";
 
 const API_URL = 'http://localhost:3100/todos';
 export const loadTodos = () => async(dispatch, getState) => {
